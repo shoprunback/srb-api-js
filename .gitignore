@@ -21,8 +21,6 @@ yarn-error.log*
 *.sln
 *.sw?
 babel.config.js
-package.json
-yarn.lock
 assets
 
 src/App.vue
