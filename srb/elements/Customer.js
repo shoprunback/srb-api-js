@@ -13,6 +13,10 @@ export default class Customer extends Main {
         return true;
     }
 
+    canUpdate() {
+        return true;
+    }
+
     fetchOneEndpoint(id) {
         return `${this.endpoint}/${id}/customer`;
     }
