@@ -1,15 +1,15 @@
-import _store from '../states/store';
-import http from './http/http';
-import { isUndef } from '../util';
+import _store from "../states/store";
+import http from "./http/http";
+import { isUndef } from "../util";
 export default class Main {
     constructor(endpoint, store) {
         this._store = _store;
-        this.store = store; 
+        this.store = store;
         this.endpoint = endpoint;
     }
 
     getRefAtt() {
-        return 'id';
+        return "id";
     }
 
     fetchEndpoint() {
@@ -31,12 +31,16 @@ export default class Main {
 
     updateEndpoint(id, ref_id = null) {
         const endpoint = this.endpoint;
-        return ref_id == null ? `${endpoint}/${id}` : `${endpoint}/${id}/${ref_id}`;
+        return ref_id == null
+            ? `${endpoint}/${id}`
+            : `${endpoint}/${id}/${ref_id}`;
     }
 
     deleteEndpoint(id, ref_id = null) {
         const endpoint = this.endpoint;
-        return ref_id == null ? `${endpoint}/${id}` : `${endpoint}/${id}/${ref_id}`;
+        return ref_id == null
+            ? `${endpoint}/${id}`
+            : `${endpoint}/${id}/${ref_id}`;
     }
 
     canFetchAll() {
@@ -49,16 +53,16 @@ export default class Main {
 
     async fetchOwn() {
         if (!this.canFetchOwn()) throw new TypeError("Can't use fetch all");
-        const {url, auth_token} = this._store;
+        const { url, auth_token } = this._store;
         const httpURL = `${url}/${this.fetchEndpoint()}`;
-        return await http._get(httpURL,{token: auth_token});
+        return await http._get(httpURL, { token: auth_token });
     }
 
     async fetchAll() {
         if (!this.canFetchAll()) throw new TypeError("Can't use fetch all");
         const { url, auth_token } = this._store;
         const httpURL = `${url}/${this.fetchAllEndpoint()}`;
-        return await http._get(httpURL,{token: auth_token});
+        return await http._get(httpURL, { token: auth_token });
     }
 
     canFetch() {
@@ -67,17 +71,17 @@ export default class Main {
 
     async fetch(id) {
         if (!this.canFetch()) throw new TypeError("Can't use fetch");
-        if(isUndef(id)) throw new TypeError("id is not null");
+        if (isUndef(id)) throw new TypeError("id is not null");
         const { url, auth_token } = this._store;
         const httpURL = `${url}/${this.fetchOneEndpoint(id)}`;
-        return await http._get(httpURL,{token: auth_token});
+        return await http._get(httpURL, { token: auth_token });
     }
 
     async hasMany(refName, id) {
         const endpoint = this.endpoint;
         const { url, auth_token } = this._store;
         const httpURL = `${url}/${endpoint}/${id}/${refName}`;
-        return await http._get(httpURL,{token: auth_token});
+        return await http._get(httpURL, { token: auth_token });
     }
 
     canNested() {
@@ -91,10 +95,14 @@ export default class Main {
 
     async fetchNested(main_id, nested_name, nested_id) {
         if (!this.canNested()) throw new TypeError("Not allow fetch nested");
-        if(isUndef(main_id)) throw new TypeError("main_id is not null");
+        if (isUndef(main_id)) throw new TypeError("main_id is not null");
         const { url, auth_token } = this._store;
-        const httpURL = `${url}/${this.nestedEndpoint(main_id, nested_name, nested_id)}`;
-        return await http._get(httpURL,{token: auth_token});
+        const httpURL = `${url}/${this.nestedEndpoint(
+            main_id,
+            nested_name,
+            nested_id
+        )}`;
+        return await http._get(httpURL, { token: auth_token });
     }
 
     canCreate() {
@@ -103,7 +111,7 @@ export default class Main {
 
     async create(payload = {}, ref_id = null) {
         if (!this.canCreate()) throw new TypeError("Not allow create!");
-        payload = JSON.stringify(payload); 
+        payload = JSON.stringify(payload);
         const { url, auth_token } = this._store;
         const httpURL = `${url}/${this.createEndpoint(ref_id)}`;
         return await http._post(httpURL, { token: auth_token }, payload);
@@ -115,8 +123,8 @@ export default class Main {
 
     async update(id, payload = {}, ref_id = null) {
         if (!this.canUpdate()) throw new TypeError("Not allow update!");
-        if(isUndef(id)) throw new TypeError("id is not null");
-        payload = JSON.stringify(payload); 
+        if (isUndef(id)) throw new TypeError("id is not null");
+        payload = JSON.stringify(payload);
         const { url, auth_token } = this._store;
         const httpURL = `${url}/${this.updateEndpoint(id, ref_id)}`;
         return await http._put(httpURL, { token: auth_token }, payload);
@@ -128,7 +136,7 @@ export default class Main {
 
     async delete(id, ref_id = null) {
         if (!this.canDelete()) throw new TypeError("Not allow delete!");
-        if(isUndef(id)) throw new TypeError("id is not null");
+        if (isUndef(id)) throw new TypeError("id is not null");
         const { url, auth_token } = this._store;
         const httpURL = `${url}/${this.deleteEndpoint(id, ref_id)}`;
         return await http._delete(httpURL, { token: auth_token });
@@ -153,5 +161,4 @@ export default class Main {
         const httpURL = `${url}/${endpoint}`;
         return await http._post(httpURL, { token: auth_token }, payload);
     }
-
 }
