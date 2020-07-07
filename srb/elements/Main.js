@@ -161,4 +161,15 @@ export default class Main {
         const httpURL = `${url}/${endpoint}`;
         return await http._post(httpURL, { token: auth_token }, payload);
     }
+
+    canGet() {
+        return false;
+    }
+
+    async _get(endpoint) {
+        if (!this.canGet()) throw new TypeError("Not allow http get!");
+        const { url, auth_token } = this._store;
+        const httpURL = `${url}/${endpoint}`;
+        return await http._get(httpURL, { token: auth_token });
+    }
 }

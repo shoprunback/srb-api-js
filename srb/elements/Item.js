@@ -42,4 +42,15 @@ export default class Item extends Main {
         const endpoint = this.endpoint;
         return `${endpoint}/${shipback_id}/returned_items/${returned_item_id}`;
     }
+
+    canGet() {
+        return true;
+    }
+
+    async fetchRefundModes(shipbackId, returnedItemId) {
+        if (shipbackId == null || returnedItemId == undefined)
+            throw new TypeError("shipbackId & returnedItemId are not null");
+        const endpoint = `${this.endpoint}/${shipbackId}/returned_items/${returnedItemId}/refund_modes`;
+        return await this._get(endpoint);
+    }
 }
